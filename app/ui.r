@@ -1,40 +1,72 @@
 library(shiny)
+library(leaflet)
+library(shinydashboard)
 
-# Define UI for application that draws a histogram
-shinyUI(fluidPage(
+
+shinyUI(
+
+  div(id="canvas",
   
-  # Application title
-  titlePanel("2009 Manhattan Housing Sales"),
+    # mabye we'll use a shinydashboard page, it looks better but really, it's nothing special and everybody uses it.
+    navbarPage(strong("TITLE",style="color: white;"), theme="styles.css",
+      # 1.INTRO TAB
+      tabPanel("Intro",
+        mainPanel(width=12,
+          h1("TITLE"),
+          h2("Introduction"),
+          p("This is a small shiny app that illustrate the", strong("noise and pest"), "problem in NYC."),
+          p("It aims to help those who are picky about where they would buy or rent an apartment."),
+          h2("Data Source"),
+          p(em("some url"))
+        ),
+        # footer
+        div(class="footer", "Applied Data Science")
+      ),
+      
+      # 2.STAT TAB
+      tabPanel("Statistics",
+        h2("Summary Statistics"),
+        dashboardBody(
+          # Boxes need to be put in a row (or column)
+          fluidRow(
+            column("Controls", width=4, height=250,
+                dateRangeInput("date_range","Time Period",start="2015-01-01",end="2015-12-31",min="2015-01-01",max="2015-12-31")
+            ),
+            column("some plot", width=8,
+              plotOutput("plot1")
+            )
   
-  # Sidebar with a selector input for neighborhood
-  sidebarLayout(
-    sidebarPanel(
-      selectInput("nbhd", label = h5("Choose a Manhattan Neighborhood"), 
-                         choices = list("all neighborhoods"=0,
-                                        "Central Harlem"=1, 
-                                        "Chelsea and Clinton"=2,
-                                        "East Harlem"=3, 
-                                        "Gramercy Park and Murray Hill"=4,
-                                        "Greenwich Village and Soho"=5, 
-                                        "Lower Manhattan"=6,
-                                        "Lower East Side"=7, 
-                                        "Upper East Side"=8, 
-                                        "Upper West Side"=9,
-                                        "Inwood and Washington Heights"=10), 
-                         selected = 0)
-      #sliderInput("p.range", label=h3("Price Range (in thousands of dollars)"),
-      #            min = 0, max = 20000, value = c(200, 10000))
-    ),
-    # Show two panels
-    mainPanel(
-      #h4(textOutput("text")),
-      h3(code(textOutput("text1"))),
-      tabsetPanel(
-        # Panel 1 has three summary plots of sales. 
-        tabPanel("Sales summary", plotOutput("distPlot")), 
-        # Panel 2 has a map display of sales' distribution
-        tabPanel("Sales map", plotOutput("distPlot1")))
+          )
+        ),
+        # footer
+        div(class="footer", "Applied Data Science")
+      ),
+      
+      # 3.MAP TAB
+      tabPanel("Map",
+        div(class="outer",
+          # lealfet map
+          leafletOutput("map", width="100%", height="100%"),
+          
+          # control panel
+          absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = TRUE,
+            top = 140, left = 30, right = "auto", bottom = "auto", width = 300, height = "auto",
+            h2("blabla"),
+            selectInput("map_color", "Map Color Theme", choices=c("Black & White"="Stamen.TonerLite", "Colored"="Hydda.Full"))
+          )
+        )
+      ),
+      
+      # 4.DATA TAB
+      tabPanel("Data",
+         # footer
+         div(class="footer", "Applied Data Science")
+      )
+      
+                     
+      
+  
     )
- )
-))
+  )
+)
 
