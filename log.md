@@ -13,3 +13,10 @@
         * Lots of columns are useful, like datetime, complaint type, descriptor...
     3. Data __"DOB_Complaints_Received.csv"__
         * see https://data.cityofnewyork.us/Housing-Development/DOB-Complaints-Received/eabe-havv
+
+* 20161006, Gao
+    1. Added click circle and popup feature to the map tab, along with a few control options, popup icons.
+    2. Possible noise data structure:
+        * For public noise maker (static), like FDNY, pubs and clubs, subway station, hospital, construction: FLOAT latitude, FLOAT longitude, CHAR name.
+        * For a designated point (variable): FLOAT lat, FLOAT long, FLOAT diameter (input), FLOAT noise_lvl (Calculated from 311 complaint data). In addition, all the public noise makers within range pop up.
+    3. Idea: Reverse noise representation. Instead of showing the noise condition in a clicked area, we can calculate the noise condition around public noise makers and compare them with each others.
