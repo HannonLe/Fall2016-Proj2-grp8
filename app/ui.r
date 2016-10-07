@@ -1,6 +1,6 @@
 library(shiny)
 library(leaflet)
-library(shinydashboard)
+library(data.table)
 
 
 shinyUI(
@@ -26,17 +26,16 @@ shinyUI(
       # 2.STAT TAB
       tabPanel("Statistics",
         h2("Summary Statistics"),
-        dashboardBody(
-          # Boxes need to be put in a row (or column)
-          fluidRow(
-            column("Controls", width=4, height=250,
-                dateRangeInput("date_range","Time Period",start="2015-01-01",end="2015-12-31",min="2015-01-01",max="2015-12-31")
-            ),
-            column("some plot", width=8,
-              plotOutput("plot1")
-            )
-  
+
+        # Boxes need to be put in a row (or column)
+        fluidRow(
+          column("Controls", width=4, height=250,
+              dateRangeInput("date_range","Time Period",start="2015-01-01",end="2015-12-31",min="2015-01-01",max="2015-12-31")
+          ),
+          column("some plot", width=8,
+            plotOutput("plot1")
           )
+
         ),
         # footer
         div(class="footer", "Applied Data Science")
@@ -59,8 +58,14 @@ shinyUI(
       
       # 4.DATA TAB
       tabPanel("Data",
-         # footer
-         div(class="footer", "Applied Data Science")
+        mainPanel(
+          h1("Data"), # title for data tab
+          column(12,
+            dataTableOutput('table')
+          )
+        ),
+        # footer
+        div(class="footer", "Applied Data Science")
       )
       
                      
