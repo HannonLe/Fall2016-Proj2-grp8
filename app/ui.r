@@ -1,6 +1,7 @@
 library(shiny)
 library(leaflet)
 library(data.table)
+library(plotly)
 
 
 shinyUI(

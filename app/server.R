@@ -61,10 +61,8 @@ shinyServer(function(input, output) {
     ## Complaint type pie chart
     output$click_complaint_pie <- renderPlotly({
       # an example
-      ds <- data.frame(labels = c("A", "B", "C"),
-                       values = c(runif(1)*10, runif(1)*10, runif(1)*10))
-      
-      plot_ly(ds, labels = labels, values = values, type = "pie") %>%
+      ds <- data.frame(labels = c("A", "B", "C"),values = c(runif(1)*10, runif(1)*10, runif(1)*10))
+      plot_ly(labels=ds$labels, values=ds$values, type = "pie") %>%
         layout(title = "Example, randomly generated")
     })
     
