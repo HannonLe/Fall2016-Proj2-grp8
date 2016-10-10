@@ -3,6 +3,11 @@ library(leaflet)
 library(data.table)
 library(plotly)
 
+# pallette for circle fill color
+complaint <- data.frame(type=c("Club/Bar/Restaurant","Residential Building/House","Street/Sidewalk",
+                               "Store/Commercial","Park/Playground","House of Worship","Above Address"),
+                        color=c('red','orange','green','blue','purple','yellow','grey'))
+
 
 shinyUI(
 
@@ -55,31 +60,37 @@ shinyUI(
           
           # control panel
           absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = TRUE,
-            top = 150, left = 30, right = "auto", bottom = "auto", width = 250, height = "auto",
-            h2("Controls"),
+            top = 120, left = 20, right = "auto", bottom = "auto", width = 250, height = "auto",
+            h3("Controls"),
             selectInput("map_color", "Map Color Theme", choices=c("Black & White"="Stamen.TonerLite", "Colored"="Hydda.Full")),
             checkboxGroupInput("enable_markers", "Add Markers for:",
-                               choices = c("School","Hospital","Contruction","Club","Pub","Subway"),
-                               selected = c("School","Hospital")),
-            sliderInput("click_radius", "Radius of selected area (meters)", min=100, max=500, value=100, step=5),
+                               choices = c("Construction","Fire Station","Hospital","Club"),
+                               selected = c("Construction","Fire Station","Hospital")),
+            sliderInput("click_radius", "Radius of selected area (meters)", min=100, max=1000, value=100, step=5),
             checkboxInput("click_show_address", "Show address of area centroid",value = T),
-            checkboxInput("click_show_centroid", "Show centroid point",value = T),
             checkboxInput("click_multi", "Compare among multiple locations",value = F),
             actionButton("clear_circles", "Clear all circles")
           ),
-          # output panel
-          absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = TRUE,
-            top = "auto", left = "auto", right = 40, bottom = 60, width = 320, height = "auto",
-            h2("Outputs"),
-            h3("Center Coordinate"),
-            p(textOutput("click_coord")),
-            h3("Center Address"),
-            p(textOutput("click_address")),
-            h3("Noise Level"),
-            p(textOutput("click_noise")),
-            h3("Noise Complaint Type"),
-            plotlyOutput("click_complaint_pie",height="320px")
 
+          # output panel
+          absolutePanel(id = "controls", class = "panel panel-default", fixed= TRUE, draggable = TRUE,
+            top = 120, left = "auto", right = 20, bottom = "auto", width = 320, height = "auto",
+            h3("Outputs"),
+            h4("Center Coordinate"),
+            p(em(textOutput("click_coord"))),
+            h4("Center Address"),
+            p(em(textOutput("click_address"))),
+            h4("Number of noise complaints"),
+            p(em(textOutput("click_complaints_per_day", inline = T), " per day")),
+            h4("Noise Complaint Type"),
+            plotlyOutput("click_complaint_pie",height="300")
+          ),
+          absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = TRUE,
+                        top=120, left=270, right='auto', bottom="auto", width=200, height="auto",
+                        checkboxGroupInput("click_complaint_type", "Show complaint type",
+                                           choices = complaint$type, selected = complaint$type),
+                        actionButton("click_all_complaint_types", "Select ALL"),
+                        actionButton("click_none_complaint_types", "Select NONE")
           )
         )
       ),

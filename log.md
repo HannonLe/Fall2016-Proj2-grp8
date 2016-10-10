@@ -22,6 +22,14 @@
     3. Idea: Reverse noise representation. Instead of showing the noise condition in a clicked area, we can calculate the noise condition around public noise makers and compare them with each others.
 
 * 20161008, Gao
-	1. Got the geodata of contruction, hospital, fire station, pubs/clubs.f
+	1. Got the geodata of contruction, hospital, fire station, pubs/clubs.
 	2. Features to be added: calculate the total/avg #comlaints within a circle.
 	3. Features to be added: show the 24h time pattern of total #comlaints within a cricle, put it on the same plot with the that of whole NYC.
+
+* 20161010, Gao
+	1. Attached marker data to the map (4 types).
+		* changed marker icon.
+	2. Attached noise data to the click circle feature
+		* calculate number of complaints within range
+		* noise complaint type pie chart
+		* noise complaint showed on map by dots with different colors (coherent with pie chart)
