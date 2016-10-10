@@ -1,9 +1,9 @@
 #For time series plot
 
-require(readr)
+require(data.table)
 require(dplyr)
 
-noise <- read_csv("~/Google Drive/Columbia/5243 ADS/Project 2/Fall2016-Proj2-grp8/data/Cleaned-311-Noise-Date.csv",col_names=T)
+noise <- fread("~/Google Drive/Columbia/5243 ADS/Project 2/Fall2016-Proj2-grp8/data/Cleaned-311-Noise-Date.csv")
 df=data.frame(table(noise$Date))
 names(df)<-c("Date","Freq")
 
