@@ -76,7 +76,6 @@ generate_plots <- function(){
                              height=700, slices="{0: {offset: 0.1},
                              1: {offset: 0.1},
                              2: {offset: 0.1}, 3: {offset: 0.1}, 4: {offset: 0.1}, 5: {offset: 0.1}, 6: {offset: 0.1}, 7: {offset: 0.1}}",
-                             title(main =list('Noise Complaint Type Distribution', cex = 1.5, font = 10)), 
                              legend= 'none',
                              colors="['red','orange','green','blue','purple','yellow','grey']",
                              pieSliceText=' ',
