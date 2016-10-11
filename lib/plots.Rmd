@@ -13,7 +13,7 @@ noise <- fread("~/Google Drive/Columbia/5243 ADS/Project 2/Fall2016-Proj2-grp8/d
 
 # rename location types 
 noise$Location[noise$Location==""]<-"Others"
-noise$Location[noise$Location=="Sidewalk"]<-"Colletion Truck"
+noise$Location[noise$Location=="Sidewalk"]<-"Collection Truck"
 
 df=data.frame(table(noise$Date))
 names(df)<-c("Date","Freq")
@@ -80,8 +80,20 @@ plot_ly(WeekMean, x = ~Week) %>%
 
 
 ```{r}
+# heatmap of noise level
+library(ggmap)
+nyc <- get_map(location = "nyc", zoom = 11)
+
+ggmap(nyc, extent = "device") + geom_density2d(data = noise, 
+    aes(x = Longitude, y = Latitude), size = 0.3) + stat_density2d(data = noise, 
+    aes(x = Longitude, y = Latitude, fill = ..level.., alpha = ..level..), size = 0.01, 
+    bins = 16, geom = "polygon") + scale_fill_gradient(low = "green", high = "red") + 
+    scale_alpha(range = c(0, 0.3), guide = FALSE)
+```
+
+
+```{r}
 ########## DON'T RUN###########
-# map of noise level
 
 df$hover <- with(df, paste(state, '<br>', "Beef", beef, "Dairy", dairy, "<br>",
                            "Fruits", total.fruits, "Veggies", total.veggies,
@@ -106,11 +118,9 @@ plot_geo(df, lat = c(40.7127, 51.5072), lon = c(-74.0059, 0.1275)) %>%
     title = '2011 US Agriculture Exports by State<br>(Hover for breakdown)',
     geo = g
   )
-```
 
 
-```{r}
-########## DON'T RUN###########
+
 # common plot options
 g <- list(
   scope = 'nyc',
