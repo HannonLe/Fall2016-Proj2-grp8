@@ -1,11 +1,11 @@
-```{r setup}
-noise_data <- read.csv("/Users/celiachen/Downloads/Fall2016-Proj2-grp8-master/data/Cleaned-311-Noise.csv")
+
+noise_data <- read.csv("../data/Cleaned-311-Noise.csv")
 library(googleVis)
 library(dplyr)
 library(data.table)
-```
 
-```{r cars}
+
+
 vars <- c("Club/Bar/Restaurant","Residential Building/House","Street/Sidewalk", "Store/Commercial","Park/Playground","House of Worship","Above Address")
 
 club <- as.numeric(count(noise_data, noise_data$Location.Type == "Club/Bar/Restaurant")[2,2])
@@ -16,7 +16,7 @@ Park <- as.numeric(count(noise_data, noise_data$Location.Type == "Park/Playgroun
 Worship <- as.numeric(count(noise_data, noise_data$Location.Type == "House of Worship")[2,2])
 other <- as.numeric(count(noise_data, noise_data$Location.Type == "Above Address")[2,2])
 
-```
+
 
 ##Here is the Donut
 
@@ -37,4 +37,4 @@ doughnut <- gvisPieChart(dat,
                            colors="['red','orange','green','blue','purple','yellow','grey']",
                            pieSliceText=' ',
                            pieHole=0.5, chartid="doughnut"))
-plot(doughnut)
+print(doughnut)

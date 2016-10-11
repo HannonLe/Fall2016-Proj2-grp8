@@ -5,27 +5,36 @@ library(ggmap)
 library(plotly)
 library(geosphere)
 
-# Read all data, including 311 complaint data and all markers data
-all_data <- load("www/all_data.RData")
-### VARIABLES: noise, markers_construction, markers_fire_station, markers_hospital, markers_club
-print(ls())
 
-# Calculate distance between two locations given their lat and lng
+# 3 map tab
+
+
+## Calculate distance between two locations given their lat and lng
 complaints_within <- function(r,lng,lat){
   return( noise[distCosine(c(lng,lat), noise[,c("lng","lat")]) <= r, ] )
 }
-# pallette for circle fill color
-complaint <- data.frame(type=c("Club/Bar/Restaurant","Residential Building/House","Street/Sidewalk",
-                               "Store/Commercial","Park/Playground","House of Worship","Above Address"),
-                        color=c('red','orange','green','blue','purple','yellow','grey'),stringsAsFactors = F)
+## test code
+## distCosine(c(-73.8667758,40.7301094), noise[1:10,c("lng","lat")])
+## distCosine(c(-73.949261,40.796914),c(-73.981882,40.768078))
+## result: 4.22km. OMG it works!
+## nrow(complaints_within(100,-73.957281,40.804097)) ## perfect!
 
-### test code
-# distCosine(c(-73.8667758,40.7301094), noise[1:10,c("lng","lat")])
-# distCosine(c(-73.949261,40.796914),c(-73.981882,40.768078))
-# result: 4.22km. OMG it works!
-# nrow(complaints_within(100,-73.957281,40.804097)) ## perfect!
+## pallette for circle fill color
+pal <- colorNumeric("Greys", c(0,1), na.color = "#000000")
+
+
+
+
 
 shinyServer(function(input, output, session) {
+  # 2.stat tab
+  ## time series plot
+  output$stat_plot_ts <- renderPlotly(stat_plots[['ts']])
+  ## heat map plot
+  ## output$stat_plot_heatmap <- renderImage()
+  output$stat_plot_doughnut <- renderGvis(stat_plots[['doughnut']])
+  
+  
   # 3.map tab
   ## Base map + test markers
   marker_opt <- markerOptions(opacity=0.8,riseOnHover=T)
@@ -44,6 +53,7 @@ shinyServer(function(input, output, session) {
     leafletProxy("map") %>% hideGroup(c("markers_club"))
     m
   })
+  output$click_complaints_per_day_area_colorbar <- renderImage(previewColors(pal, 0:10/10))
 
   ## change map color theme
   observeEvent(input$map_color, {
@@ -70,6 +80,7 @@ shinyServer(function(input, output, session) {
     click <- input$map_click
     clat <- click$lat
     clng <- click$lng
+    radius <- input$click_radius
     address <- NULL
     if(input$click_show_address) address <- revgeocode(c(clng,clat))
 
@@ -80,13 +91,6 @@ shinyServer(function(input, output, session) {
     ## I also give the circles a group, "circles", so you can
     ## then do something like hide all the circles with hideGroup('circles')
     
-    # draw circles
-    leafletProxy('map') %>%
-      addCircles(lng=clng, lat=clat, group='circles',
-                 stroke=F, radius=input$click_radius, fillColor="#8c8c8c",
-                 popup=address, fillOpacity=0.5) %>%
-      addCircles(lng=clng, lat=clat, group='centroids', radius=1, weight=2, color='black',opacity=1,fillColor='black',fillOpacity=1)
-    
     # output panel info
     ## text info
     output$click_coord <- renderText(paste("Lat:",round(clat,6),", Long:",round(clng,6)))
@@ -95,8 +99,19 @@ shinyServer(function(input, output, session) {
     complaints_within_range <- complaints_within(input$click_radius, clng, clat)
     complaints_total <- nrow(complaints_within_range)
     complaints_per_day <- complaints_total / 365
+    complaints_per_day_area <- complaints_per_day / (radius/100)^2
 
-    output$click_complaints_per_day <- renderText(round(complaints_per_day,3))
+    output$click_complaints_total <- renderText(complaints_total)
+    output$click_complaints_per_day <- renderText(round(complaints_per_day,2))
+    output$click_complaints_per_day_area <- renderText(round(complaints_per_day_area, 2))
+    
+    # draw circles
+    leafletProxy('map') %>%
+      addCircles(lng=clng, lat=clat, group='circles',
+                 stroke=T, radius=radius, popup=paste("NOISE LEVEL:",round(complaints_per_day_area,2), sep=" "),
+                 color='black', opacity=1, weight=1,
+                 fillColor=pal(complaints_per_day_area),fillOpacity=0.5) %>%
+      addCircles(lng=clng, lat=clat, group='centroids', radius=1, weight=2, color='black',opacity=1,fillColor='black',fillOpacity=1)
     
     ## draw dots for every single complaint within range
     complaints_within_range <- merge(complaints_within_range,complaint,by=c("type","type"),all.y=F)
@@ -147,7 +162,7 @@ shinyServer(function(input, output, session) {
   
   
   # 4.data tab
-  output$table <- renderDataTable(iris,
+  output$table <- renderDataTable(noise,
     options = list(pageLength = 10)
   )
 })

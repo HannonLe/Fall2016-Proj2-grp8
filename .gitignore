@@ -1,4 +1,5 @@
 ## manually ignore
+data/311_Service_Requests_2015.csv
 *.DS_Store
 
 ## below are the default ignores for R

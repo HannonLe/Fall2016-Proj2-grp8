@@ -3,11 +3,6 @@ library(leaflet)
 library(data.table)
 library(plotly)
 
-# pallette for circle fill color
-complaint <- data.frame(type=c("Club/Bar/Restaurant","Residential Building/House","Street/Sidewalk",
-                               "Store/Commercial","Park/Playground","House of Worship","Above Address"),
-                        color=c('red','orange','green','blue','purple','yellow','grey'))
-
 
 shinyUI(
 
@@ -24,7 +19,9 @@ shinyUI(
           p("This is a small shiny app that illustrate the", strong("noise"), "problem in NYC."),
           p("It aims to help those who are picky about where they would buy or rent an apartment by providing noise information in a selected area."),
           h2("Data Source"),
-          p(strong("-  "),a(em("311 Complaint data 2015"),href="https://data.cityofnewyork.us/dataset/311-Service-Requests-From-2015/57g5-etyj")),
+          p(strong("-  "),a(em("311 Complaint data 2015"),href="https://data.cityofnewyork.us/Social-Services/311-Service-Requests-2015/hemm-82xw")),
+          p(strong("-  "),a(em("somedata")),href=""),
+          p(strong("-  "),a(em("somedata")),href=""),
           p(strong("-  "),a(em("somedata")),href="")
         ),
         # footer
@@ -34,19 +31,22 @@ shinyUI(
       # 2.STAT TAB
       tabPanel("Statistics",
         h2("Summary Statistics"),
-        br(),
-
-        # Boxes need to be put in a row (or column)
-        fluidRow(
-          column("Controls", width=4, height=250,
-            dateRangeInput("stats_date_range","Time Period",start="2015-01-01",end="2015-12-31",min="2015-01-01",max="2015-12-31"),
-            sliderInput("stats_hours","Hours",min=strptime("00:00:00","%H:%M:%S"),max=strptime("23:59:59","%H:%M:%S"),strptime("00:00:00","%H:%M:%S"),timeFormat="%T",
-                        animate=animationOptions(interval=500,playButton="Play"))
-          ),
-          column("some plot", width=8,
-            plotOutput("stats_plot1")
+        
+        wellPanel(style = "overflow-y:scroll; max-height: 750px; background-color: #ffffff;",
+          tabsetPanel(type="tabs",
+            tabPanel(title="1. NYC Weekly mean number of noise complaints",
+                     br(),
+                     div(plotlyOutput("stat_plot_ts"), align="center")
+            ),
+            tabPanel(title="2. NYC number of noise complaints heatmap",
+                     br(),
+                     div(img(src="img/stat_plot_heatmap.png", width="90%"), align="center" )
+            ),
+            tabPanel(title="3. Type of Complaints",
+                     br(),
+                     div(htmlOutput("stat_plot_doughnut"), align="center")
+            )
           )
-
         ),
         # footer
         div(class="footer", "Applied Data Science")
@@ -77,11 +77,13 @@ shinyUI(
             top = 120, left = "auto", right = 20, bottom = "auto", width = 320, height = "auto",
             h3("Outputs"),
             h4("Center Coordinate"),
-            p(em(textOutput("click_coord"))),
+            p(textOutput("click_coord")),
             h4("Center Address"),
-            p(em(textOutput("click_address"))),
+            p(textOutput("click_address")),
             h4("Number of noise complaints"),
-            p(em(textOutput("click_complaints_per_day", inline = T), " per day")),
+            p(strong(textOutput("click_complaints_total", inline = T)), " in total (year 2015)."),
+            p(strong(textOutput("click_complaints_per_day", inline = T)), " per day."),
+            p(strong("Noise level"), "(Number of complaints per day per 100m radius area):", strong(textOutput("click_complaints_per_day_area", inline = T))),
             h4("Noise Complaint Type"),
             plotlyOutput("click_complaint_pie",height="300")
           ),
@@ -91,18 +93,23 @@ shinyUI(
                                            choices = complaint$type, selected = complaint$type),
                         actionButton("click_all_complaint_types", "Select ALL"),
                         actionButton("click_none_complaint_types", "Select NONE")
+          ),
+          # color bar panel
+          absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE, draggable = TRUE,
+                        top = 340, left = "auto", right = 340, bottom = "auto", width = 100, height = "auto",
+                        h4("NOISE LEVEL colorbar"),
+                        div(img(src="img/colorbar.png"), style="opacity: 0.65")
           )
+          
         )
       ),
       
       # 4.DATA TAB
       tabPanel("Data",
         mainPanel(
-          h1("Data"), # title for data tab
+          h1("311 Complaint Data (2015)"), # title for data tab
           br(),
-          column(12,
-            dataTableOutput('table')
-          )
+          dataTableOutput('table')
         ),
         # footer
         div(class="footer", "Applied Data Science")

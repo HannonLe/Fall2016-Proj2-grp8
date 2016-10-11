@@ -5,7 +5,7 @@
 library(dplyr)
 library(stringr)
 
-# 311 data
+# 311 data with time
 noise311 <- read.csv("../data/Cleaned-311-Noise.csv",stringsAsFactors = F)
 str(noise311)
 table(noise311$Descriptor)
@@ -31,6 +31,9 @@ markers_hospital <- data.frame(name=hospital$Facility.Name,
                        address=str_sub(str_match(str_replace_all(hospital$Location.1, "\\n", " "), "[^\\()]+"), 1,-2))
 rm(temp)
 
+# 311 data with date
+noise_date <- read.csv("../data/Cleaned-311-Noise-Date.csv")
+
 # fire station
 fire <- read.csv("../data/Fire Station.csv",stringsAsFactors = F)
 markers_fire_station <- data.frame(name="", lat=fire$lat, lng=fire$lng, address="")
@@ -53,7 +56,7 @@ rm(temp)
 ### done cleaning
 
 # save to www folder
-save(noise, markers_construction,markers_fire_station,markers_hospital,markers_club, file="../app/www/all_data.RData")
+save(noise, noise_date, markers_construction,markers_fire_station,markers_hospital,markers_club, file="../app/www/all_data.RData")
 
 # test
 load("../app/www/all_data.RData")

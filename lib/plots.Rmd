@@ -9,7 +9,7 @@ output: html_notebook
 require(data.table)
 require(dplyr)
 
-noise <- fread("~/Google Drive/Columbia/5243 ADS/Project 2/Fall2016-Proj2-grp8/data/Cleaned-311-Noise-Date.csv")
+noise <- fread("../data/Cleaned-311-Noise-Date.csv")
 
 # rename location types 
 noise$Location[noise$Location==""]<-"Others"

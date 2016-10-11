@@ -33,3 +33,8 @@
 		* calculate number of complaints within range
 		* noise complaint type pie chart
 		* noise complaint showed on map by dots with different colors (coherent with pie chart)
+
+* 20161011, Gao
+    1. Added 3 summary plots to stat tab.
+    2. click circle fillcolor now corresponds to the NOISE LEVEL of the area.
+        * added colorbar as reference
