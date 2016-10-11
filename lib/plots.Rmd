@@ -1,0 +1,161 @@
+---
+title: "Time Series Plot and Choropleth Map"
+output: html_notebook
+---
+
+```{r}
+#Data preparation for time series plot
+
+require(data.table)
+require(dplyr)
+
+noise <- fread("~/Google Drive/Columbia/5243 ADS/Project 2/Fall2016-Proj2-grp8/data/Cleaned-311-Noise-Date.csv")
+
+# rename location types 
+noise$Location[noise$Location==""]<-"Others"
+noise$Location[noise$Location=="Sidewalk"]<-"Colletion Truck"
+
+df=data.frame(table(noise$Date))
+names(df)<-c("Date","Freq")
+
+# add columns of Months, Weeks, and Weekdays (Day)
+df$Date <- as.Date(df$Date,format="%m/%d/%y") #convert to standard Date format
+df$Day <- format(df$Date,"%a") #Add Day column
+df$Month <- as.Date(cut(df$Date,breaks = "month"))
+df <- mutate(df,Month=substr(Month,6,7)) #Add Month column
+df$Week <- as.Date(cut(df$Date,breaks = "week",start.on.monday = T)) # Add Week column
+
+WeekMean=summarise(group_by(df,Week),round(mean(Freq)))
+DayMean=summarise(group_by(df,Day),round(mean(Freq)))
+w=c("Mon","Tue","Wed", "Thu","Fri","Sat","Sun")
+DayM=DayMean[match(w,DayMean$Day),]
+names(DayM)[2]<-"Mean_Complaints"
+
+```
+
+
+```{r}
+# Time Series Plotly
+require(plotly)
+plot_ly(WeekMean, x = ~Week) %>%
+  add_lines(y = ~`round(mean(Freq))`) %>%
+  layout(
+    title = "NYC Noise Level 2015",
+    xaxis = list(title="Weeks",
+      rangeselector = list(
+        buttons = list(
+          list(
+            count = 3,
+            label = "3 mo",
+            step = "month",
+            stepmode = "backward"),
+          list(
+            count = 6,
+            label = "6 mo",
+            step = "month",
+            stepmode = "backward"),
+          list(
+            count = 1,
+            label = "1 yr",
+            step = "year",
+            stepmode = "backward"),
+          list(
+            count = 1,
+            label = "YTD",
+            step = "year",
+            stepmode = "todate"),
+          list(step = "all"))),
+
+      rangeslider = list(type = "date")),
+
+    yaxis = list(title = "Weekly Mean of Noise Complaints")
+   )
+```
+
+
+
+
+
+
+
+
+```{r}
+########## DON'T RUN###########
+# map of noise level
+
+df$hover <- with(df, paste(state, '<br>', "Beef", beef, "Dairy", dairy, "<br>",
+                           "Fruits", total.fruits, "Veggies", total.veggies,
+                           "<br>", "Wheat", wheat, "Corn", corn))
+# give state boundaries a white border
+l <- list(color = toRGB("white"), width = 2)
+# specify some map projection/options
+g <- list(
+  scope = 'usa',
+  projection = list(type = 'albers usa'),
+  showlakes = TRUE,
+  lakecolor = toRGB('white')
+)
+
+plot_geo(df, lat = c(40.7127, 51.5072), lon = c(-74.0059, 0.1275)) %>%
+  add_trace(
+    z = ~total.exports, text = ~hover, locations = ~code,
+    color = ~total.exports, colors = 'Purples'
+  ) %>%
+  colorbar(title = "Millions USD") %>%
+  layout(
+    title = '2011 US Agriculture Exports by State<br>(Hover for breakdown)',
+    geo = g
+  )
+```
+
+
+```{r}
+########## DON'T RUN###########
+# common plot options
+g <- list(
+  scope = 'nyc',
+  showframe = F,
+  showland = T,
+  landcolor = toRGB("grey90")
+)
+
+g1 <- c(
+  g,
+  resolution = 50,
+  showcoastlines = T,
+  countrycolor = toRGB("white"),
+  coastlinecolor = toRGB("white"),
+  projection = list(type = 'Mercator'),
+  list(lonaxis = list(range = c(-15, -5))),
+  list(lataxis = list(range = c(0, 12))),
+  list(domain = list(x = c(0, 1), y = c(0, 1)))
+)
+
+g2 <- c(
+  g,
+  showcountries = F,
+  bgcolor = toRGB("white", alpha = 0),
+  list(domain = list(x = c(0, .6), y = c(0, .6)))
+)
+
+noise %>%
+  plot_geo(
+    locationmode = 'country names', sizes = c(1, 600), color = I("black")
+  ) %>%
+  add_markers(
+    y = ~Lat, x = ~Lon, locations = ~Country,
+    size = ~Value, color = ~abbrev, text = ~paste(Value, "cases")
+  ) %>%
+  add_text(
+    x = 21.0936, y = 7.1881, text = 'Africa', showlegend = F, geo = "geo2"
+  ) %>%
+  add_trace(
+    data = df9, z = ~Month, locations = ~Country,
+    showscale = F, geo = "geo2"
+  ) %>%
+  layout(
+    title = 'NYC Noise>',
+    geo = g1, geo2 = g2
+  )
+```
+
