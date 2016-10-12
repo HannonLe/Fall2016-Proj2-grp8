@@ -31,7 +31,9 @@ Term: Fall 2016
    contains the original 311 noise complaint data we used to conduct analysis and write algorithms. It also enables searching and sorting functions.
 	   
 ### Outlook
-Our next step is to provide a more well-rounded picture of living conditions by incorporating data of rodents/pests sightings into our app. Hope this app could help New Yorkers find their peaceful land!
+Our next step is to provide a more well-rounded picture of living conditions by incorporating data of rodents/pests sightings into our app. 
+    
+Hope this app will help New Yorkers find their peaceful land!
 
 
 ![screenshot](doc/Screenshot_temp.png)
