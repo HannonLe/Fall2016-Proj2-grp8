@@ -71,7 +71,7 @@ shinyUI(
             h3("Controls"),
             selectInput("map_color", "Map Color Theme", choices=c("Black & White"="Stamen.TonerLite", "Colored"="Hydda.Full")),
             checkboxGroupInput("enable_markers", "Add Markers for:",
-                               choices = c("Construction","Fire Station","Hospital","Club"),
+                               choices = c("Construction","Fire Station","Hospital"),
                                selected = c("Construction","Fire Station","Hospital")),
             sliderInput("click_radius", "Radius of selected area (meters)", min=100, max=1000, value=100, step=5),
             checkboxInput("click_show_address", "Show address of area centroid",value = T),

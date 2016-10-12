@@ -47,8 +47,8 @@ shinyServer(function(input, output, session) {
       addMarkers(~lng,~lat,popup=NULL,group="markers_fire_station",options=marker_opt,icon=list(iconUrl='icon/fire_station.png',iconSize=c(25,25)))
     leafletProxy("map", data = markers_hospital) %>%
       addMarkers(~lng,~lat,popup=~name,group="markers_hospital",options=marker_opt,icon=list(iconUrl='icon/hospital.png',iconSize=c(25,25)))
-    leafletProxy("map", data = markers_club) %>%
-      addMarkers(~lng,~lat,popup=NULL,group="markers_club",options=marker_opt)
+    # leafletProxy("map", data = markers_club) %>%
+    #  addMarkers(~lng,~lat,popup=NULL,group="markers_club",options=marker_opt)
     
     leafletProxy("map") %>% hideGroup(c("markers_club"))
     m
@@ -68,8 +68,8 @@ shinyServer(function(input, output, session) {
     else{leafletProxy("map") %>% hideGroup("markers_fire_station")}
     if("Hospital" %in% input$enable_markers) leafletProxy("map") %>% showGroup("markers_hospital")
     else{leafletProxy("map") %>% hideGroup("markers_hospital")}
-    if("Club" %in% input$enable_markers) leafletProxy("map") %>% showGroup("markers_club")
-    else{leafletProxy("map") %>% hideGroup("markers_club")}
+    # if("Club" %in% input$enable_markers) leafletProxy("map") %>% showGroup("markers_club")
+    # else{leafletProxy("map") %>% hideGroup("markers_club")}
   }, ignoreNULL = FALSE)
   
   ## upon click, show circle around the location along with popups
