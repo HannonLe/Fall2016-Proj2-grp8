@@ -4,29 +4,33 @@
 Term: Fall 2016
 
 + Team #8
-+ Project title: Noise around you
++ Project title: Noises Around You
 + Team members
-	+ Song, Shuli
-	+ Zhang, Chi
 	+ Chen, Zheyuan
 	+ Gao, Yinxiang
+	+ Song, Shuli
+	+ Zhang, Chi
 	+ Zhang, Wanyi
 
 
-+ Project summary:
-
-   This project focused the noise level distribution in New York City by integrating the analyses of the 311 complaints data, the geographical data of construction sites, fire stations, hospitals and clubs in NYC. It's showcased by a shinyApp which includes 3 main tabs: statistics, map and data.
+### Background
+    
+   We know a lot of New Yorkers are as picky as we are, especially when renting/buying an apartment. New York City is such a big apple glazed with hustle and bustle, which not only gives you convenience of living in a big city but also annoys you with its side effects, such as, noises, rodents, and bugs.
+   
+### Project summary
+   
+   This project explores and visualizes the noise level in New York City by integrating analyses of the 311 complaints data in 2015 on [NYC Open Data Portal](https://nycopendata.socrata.com/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9), the geographical data of construction sites, fire stations, hospitals, and clubs in NYC. We create a Shiny App to help users navigate through our findings in 3 main tabs: Statistics, Map and Data. 
 
    + Statistics: 
-   The statistical analysis tab visualized the exploritary analysis of the noise data, inlcuding the numbers of noise complaints by time series and locations, and the types of noise complaints proportional distribution.
+   This tab presents 3 visualizations of the noise data, inlcuding an interactive time series plot, heatmap of the numbers of noise complaints in NYC, and donut chart of noise complaint types.
    
    + Map: 
-   This tab is an interactive app which enables users to choose any location in New York City and the algorithms will automatically calculate and output the geographical information, and the sources of noise around the point by the radius which also can be altered by users.
+   This tab is an interactive map which enables users to pinpoint any location in New York City, and the algorithms will automatically calculate and output geographical information and summary statistics of surrounding noise complaints of that location. Users can also customize display settings, choose radius they want to explore, and compare multiple location results.
    
    + Data: 
-   Original data which we were using to conduct the analysis and write the algorithms. It also contains the searching and sorting functions of the data.
+   This tab contains the original 311 noise complaint data we used to conduct the analysis and write the algorithms. It also enables searching and sorting functions.
 	
-   Hope this app can help New Yorkers to find their peaceful land!
+   Our next step is to provide more perspectives by incorporating data of rodents/pests sightings. We hope this app could help New Yorkers find their peaceful land!
 
 
 ![screenshot](doc/Screenshot_temp.png)
