@@ -42,3 +42,6 @@ Hope this app will help New Yorkers find their peaceful land!
 ![screenshot](doc/Screenshot_temp.png)
 
 
++ Contribution Statement:
+
+    The team worked tightly together and all put in tons of efforts on the project. Worth to be mentioned, Gao Yinxiang made an outstanding contribution on framework designing and coding of the app. 
