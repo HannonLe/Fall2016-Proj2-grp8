@@ -43,7 +43,7 @@ generate_plots <- function(){
   plot1 <- plot_ly(WeekMean, x = ~Week) %>%
     add_lines(y = ~`round(mean(Freq))`) %>%
     layout(
-      title = "NYC Weekly Mean Number of Noise Complaints 2015",
+      title = "NYC Noise Complaints 2015",
       xaxis = list(title="Weeks",
                    rangeselector = list(
                      buttons = list(
@@ -77,6 +77,8 @@ generate_plots <- function(){
                              1: {offset: 0.1},
                              2: {offset: 0.1}, 3: {offset: 0.1}, 4: {offset: 0.1}, 5: {offset: 0.1}, 6: {offset: 0.1}, 7: {offset: 0.1}}",
                              legend= 'none',
+                             title='Noise Complaint Type Distribution',
+                             titleTextStyle="{fontSize: 22}",
                              colors="['red','orange','green','blue','purple','yellow','grey']",
                              pieSliceText=' ',
                              pieHole=0.5, chartid="doughnut"))

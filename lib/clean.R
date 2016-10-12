@@ -53,10 +53,15 @@ markers_construction <- data.frame(name=construct$projdesc,
                                    address=str_sub(str_match(str_replace_all(construct$Location.1, "\\n", " "), "[^\\()]+"), 1,-2))
 rm(temp)
 
+# include both date and time
+noise311 <- noise311 %>% 
+  mutate(Date=noise_date$Date) %>% 
+  select(Date, Time, Complaint.Type,Location.Type,Descriptor,Latitude,Longitude)
+
 ### done cleaning
 
 # save to www folder
-save(noise, noise_date, markers_construction,markers_fire_station,markers_hospital,markers_club, file="../app/www/all_data.RData")
+save(noise311, noise, noise_date, markers_construction,markers_fire_station,markers_hospital,markers_club, file="../app/www/all_data.RData")
 
 # test
 load("../app/www/all_data.RData")

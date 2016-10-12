@@ -162,7 +162,7 @@ shinyServer(function(input, output, session) {
   
   
   # 4.data tab
-  output$table <- renderDataTable(noise,
-    options = list(pageLength = 10)
+  output$table <- renderDataTable(noise311,
+    options = list(pageLength = 10, lengthMenu = list(c(10)))
   )
 })

@@ -13,16 +13,19 @@ shinyUI(
       # 1.INTRO TAB
       tabPanel("Intro",
         mainPanel(width=12,
-          h1("Project: Open Data NYC"),
+          h1("Project: Open Data NYC - an RShiny app development project"),
           br(),
-          h2("Introduction"),
-          p("This is a small shiny app that illustrate the", strong("noise"), "problem in NYC."),
-          p("It aims to help those who are picky about where they would buy or rent an apartment by providing noise information in a selected area."),
-          h2("Data Source"),
-          p(strong("-  "),a(em("311 Complaint data 2015"),href="https://data.cityofnewyork.us/Social-Services/311-Service-Requests-2015/hemm-82xw")),
-          p(strong("-  "),a(em("somedata")),href=""),
-          p(strong("-  "),a(em("somedata")),href=""),
-          p(strong("-  "),a(em("somedata")),href="")
+          h2("Background"),
+          p("We know a lot of New Yorkers are as picky as we are, especially when renting/buying an apartment."),
+          p("New York City is such a big apple glazed with hustle and bustle, which not only gives you convenience of living in a big city but also annoys you with its side effects, such as, noises, rodents, and bugs."),
+          h2("Project summary"),
+          p("This project explores and visualizes the noise level in New York City by integrating analyses of the 311 complaints data in 2015 on NYC Open Data Portal, the geographical data of construction sites, fire stations, hospitals, and clubs in NYC. We created a Shiny App to help in 3 main tabs: statistics, map and data. Our next step is to integrate data of rodents/pests sightings."),
+          br(),
+          p("   - ",strong("Statistics"), ": This tab presents 3 visualizations of the noise data, inlcuding an interactive time series plot, heatmap of the numbers of noise complaints in NYC, and the types of noise complaints proportional distribution."),
+          p("   - ",strong("Map"),": This tab is an interactive map which enables users to pinpoint any location in New York City, and the algorithms will automatically calculate and output geographical information and summary statistics of surrounding ",strong("noise complaints")," of that location. Users can also customize display settings, choose radius they want to explore, and compare multiple location results."),
+          p("   - ",strong("Data"),": This tab contains the original 311 noise complaint data we used to conduct the analysis and write the algorithms. It also enables searching and sorting functions."),
+          br(),
+          p("Hope this app could help New Yorkers to find their peaceful land!")
         ),
         # footer
         div(class="footer", "Applied Data Science")
@@ -32,17 +35,21 @@ shinyUI(
       tabPanel("Statistics",
         h2("Summary Statistics"),
         
-        wellPanel(style = "overflow-y:scroll; max-height: 750px; background-color: #ffffff;",
+        wellPanel(style = "overflow-y:scroll; height: 850px; max-height: 750px; background-color: #ffffff;",
           tabsetPanel(type="tabs",
-            tabPanel(title="1. NYC Weekly mean number of noise complaints",
+            tabPanel(title="1. Complaints by week",
                      br(),
                      div(plotlyOutput("stat_plot_ts"), align="center")
             ),
-            tabPanel(title="2. NYC number of noise complaints heatmap",
+            tabPanel(title="2. Complaints by 24 hours",
+                     br(),
+                     div(img(src="img/stat_time_distribution.png", width=800), align="center")
+            ),
+            tabPanel(title="3. Complaints geographical distribution",
                      br(),
                      div(img(src="img/stat_plot_heatmap.png", width="90%"), align="center" )
             ),
-            tabPanel(title="3. Type of Complaints",
+            tabPanel(title="4. Type of Complaints",
                      br(),
                      div(htmlOutput("stat_plot_doughnut"), align="center")
             )
@@ -106,7 +113,7 @@ shinyUI(
       
       # 4.DATA TAB
       tabPanel("Data",
-        mainPanel(
+        div(width = 12,
           h1("311 Complaint Data (2015)"), # title for data tab
           br(),
           dataTableOutput('table')
