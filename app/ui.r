@@ -16,16 +16,16 @@ shinyUI(
           h1("Project: Open Data NYC - an RShiny app development project"),
           br(),
           h2("Background"),
-          p("We know a lot of New Yorkers are as picky as we are, especially when renting/buying an apartment."),
-          p("New York City is such a big apple glazed with hustle and bustle, which not only gives you convenience of living in a big city but also annoys you with its side effects, such as, noises, rodents, and bugs."),
+          p("We know a lot of New Yorkers are as picky as we are, especially when it comes to renting/buying an apartment. New York City is such a big apple glazed with hustle and bustle, which not only gives you convenience of living but also annoys you with its side effects, such as noises, rodents, and bugs."),
           h2("Project summary"),
-          p("This project explores and visualizes the noise level in New York City by integrating analyses of the 311 complaints data in 2015 on NYC Open Data Portal, the geographical data of construction sites, fire stations, hospitals, and clubs in NYC. We created a Shiny App to help in 3 main tabs: statistics, map and data. Our next step is to integrate data of rodents/pests sightings."),
+          p("This project explores and visualizes the noise level in New York City by integrating analyses of the 311 complaints data in 2015 on NYC Open Data Portal, the geographical data of construction sites, fire stations, hospitals, and clubs in NYC. We created a Shiny App to help users navigate through our findings in 3 main tabs: Statistics, Map, and Data."),
           br(),
-          p("   - ",strong("Statistics"), ": This tab presents 3 visualizations of the noise data, inlcuding an interactive time series plot, heatmap of the numbers of noise complaints in NYC, and the types of noise complaints proportional distribution."),
-          p("   - ",strong("Map"),": This tab is an interactive map which enables users to pinpoint any location in New York City, and the algorithms will automatically calculate and output geographical information and summary statistics of surrounding ",strong("noise complaints")," of that location. Users can also customize display settings, choose radius they want to explore, and compare multiple location results."),
-          p("   - ",strong("Data"),": This tab contains the original 311 noise complaint data we used to conduct the analysis and write the algorithms. It also enables searching and sorting functions."),
-          br(),
-          p("Hope this app could help New Yorkers to find their peaceful land!")
+          p("   - ",strong("Statistics"), ": presents 3 visualizations of the noise data, inlcuding an interactive time series plot, heatmap of the numbers of noise complaints in NYC, and donut chart of noise complaint types."),
+          p("   - ",strong("Map"),": enables users to pinpoint any location in New York City, and algorithms will automatically calculate and output geographical information and summary statistics of surrounding noise complaints of that location. Users can also customize display settings, choose radiuses they want to explore, and compare multiple location results."),
+          p("   - ",strong("Data"),": contains the original 311 noise complaint data we used to conduct analysis and write algorithms. It also enables searching and sorting functions."),
+          h2("Outlook"),
+          p("Our next step is to provide a more well-rounded picture of living conditions by incorporating data of rodents/pests sightings into our app."),
+          p("Hope this app will help New Yorkers find their peaceful land!")
         ),
         # footer
         div(class="footer", "Applied Data Science")
