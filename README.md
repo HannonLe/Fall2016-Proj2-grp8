@@ -15,16 +15,16 @@ Term: Fall 2016
 
 + Project summary:
 
-   This project introduced the noise level distribution in New York City by integrating the analysis of the 311 complaints data, the geographical data of construction sites, fire stations, hospitals and clubs in NYC. It's showcased by a shinyapp which includes 3 main tabs: statistics, map and data.
+   This project focused the noise level distribution in New York City by integrating the analyses of the 311 complaints data, the geographical data of construction sites, fire stations, hospitals and clubs in NYC. It's showcased by a shinyApp which includes 3 main tabs: statistics, map and data.
 
    + Statistics: 
-   The statistics analysis tab showed the descriptive analysis of the noise data, inlcuding the numbers of noise complaints by time series and locations, and the types of noise compplaints distribution.
+   The statistical analysis tab visualized the exploritary analysis of the noise data, inlcuding the numbers of noise complaints by time series and locations, and the types of noise complaints proportional distribution.
    
    + Map: 
-   This tab is an interactive page which enables the user to choose any location in New York City and the algorism will automatically calculate and output the geographical information, and the noise sources around the point by the radium which also can be altinated by users.
+   This tab is an interactive app which enables users to choose any location in New York City and the algorithms will automatically calculate and output the geographical information, and the sources of noise around the point by the radius which also can be altered by users.
    
    + Data: 
-   Original datas which we used to conduct the analysis and write the algorisms. It also contains the searching and sorting functions.
+   Original data which we were using to conduct the analysis and write the algorithms. It also contains the searching and sorting functions of the data.
 	
    Hope this app can help New Yorkers to find their peaceful land!
 
