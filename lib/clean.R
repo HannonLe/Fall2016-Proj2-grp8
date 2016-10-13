@@ -19,7 +19,7 @@ table(noise311$Location.Type)
 #                   Descriptor != "Loud Music/Nighttime(Mark Date And Time)",
 #                   Descriptor != "Air Condition/Ventilation Equip, Commercial",
 #                   Descriptor != "Other Noise Sources (Use Comments)" )
-noise <- with(noise311[noise311$Location.Type != "",], data.frame(time=Time, type=Location.Type, lat=Latitude, lng=Longitude))
+noise <- with(noise311[noise311$Location.Type != "",], data.frame(time=Time, hour=as.numeric(str_match(Time,"\\d\\d")), type=Location.Type, lat=Latitude, lng=Longitude))
 
 # hospital
 hospital <- read.csv("../data/NYC_Health_and_Hospitals_Corporation_Facilities.csv",stringsAsFactors = F)

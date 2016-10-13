@@ -38,3 +38,8 @@
     1. Added 3 summary plots to stat tab.
     2. click circle fillcolor now corresponds to the NOISE LEVEL of the area.
         * added colorbar as reference
+
+* 20161013, Gao
+    1. Reversed colorbar legend (higher noise level on top).
+    2. Added seperate hour function for noise complaint dots.
+    3. Added time distribution plot for click circle output.

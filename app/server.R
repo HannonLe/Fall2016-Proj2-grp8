@@ -75,7 +75,7 @@ shinyServer(function(input, output, session) {
   ## upon click, show circle around the location along with popups
   observeEvent(input$map_click, {
     # remove previous circles
-    if(!input$click_multi) leafletProxy('map') %>% clearGroup(c("circles","centroids",complaint$type))
+    if(!input$click_multi) leafletProxy('map') %>% clearGroup(c("circles","centroids",paste(complaint$type,rep(1:24,each=7))))
     # Get the click info
     click <- input$map_click
     clat <- click$lat
@@ -104,6 +104,19 @@ shinyServer(function(input, output, session) {
     output$click_complaints_total <- renderText(complaints_total)
     output$click_complaints_per_day <- renderText(round(complaints_per_day,2))
     output$click_complaints_per_day_area <- renderText(round(complaints_per_day_area, 2))
+    if(input$click_enable_hours) output$click_complaints_hour <- renderText(paste(nrow(subset(complaints_within_range,hour==input$click_hours))," in ",complaints_total, " complaints (", input$click_hours,"h)",sep=""))
+    
+    ## 24h time distribution
+    output$click_complaint_timedist <- renderPlotly({
+      ds <- table(complaints_within_range$hour)
+      ds <- ds[as.character(1:24)]
+      ds[is.na(ds)] <- 0
+      ds <- data.frame(hour=1:24,count=as.data.frame(ds)$Freq)
+      plot_ly(x=ds$hour,y=ds$count, type='bar') %>%
+        layout(title="Time distribution in 24h",
+               xaxis=list(title="Hours",tickfont=list(size=9)),
+               yaxis=list(title="Complaints",tickfont=list(size=9)))
+    })
     
     # draw circles
     leafletProxy('map') %>%
@@ -116,19 +129,26 @@ shinyServer(function(input, output, session) {
     ## draw dots for every single complaint within range
     complaints_within_range <- merge(complaints_within_range,complaint,by=c("type","type"),all.y=F)
     leafletProxy('map', data=complaints_within_range) %>%
-      addCircles(~lng, ~lat, group=~type,
+      addCircles(~lng, ~lat, group=~paste(type,hour),
                  stroke=F, radius=12, fillColor=~color,
                  fillOpacity=0.2)
     
     ## Complaint type pie chart
     output$click_complaint_pie <- renderPlotly({
       # an example
-      ds <- table(complaints_within_range$type)
+      if(input$click_enable_hours){
+        ds <- table(subset(complaints_within_range, hour == input$click_hours)$type)
+        pie_title <- paste("Noise complaint type ","(",input$click_hours,"h)",sep="")
+      }
+      else{
+        ds <- table(complaints_within_range$type)
+        pie_title <- "Noise complaint type (1h-24h)"
+      }
       ds <- ds[complaint$type]
       ds[is.na(ds)] <- 0
       plot_ly(labels=complaint$type, values=ds, type = "pie",
               marker=list(colors=complaint$color)) %>%
-        layout(title = NULL,showlegend=F,
+        layout(title = pie_title,showlegend=F,
                xaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F),
                yaxis=list(showgrid=F,zeroline=F,showline=F,autotick=T,ticks='',showticklabels=F))
     })
@@ -136,11 +156,20 @@ shinyServer(function(input, output, session) {
   })
 
   ## show/hide complaint dots of specific group
-  observeEvent(input$click_complaint_type, {
-    for(type in complaint$type){
-      if(type %in% input$click_complaint_type) leafletProxy("map") %>% showGroup(type)
-      else{leafletProxy("map") %>% hideGroup(type)}
+  observeEvent(list(input$click_complaint_type, input$click_enable_hours, input$click_hours), {
+    if(input$click_enable_hours){
+      for(type in complaint$type){
+        if(type %in% input$click_complaint_type) leafletProxy("map") %>% hideGroup(paste(type,1:24)) %>% showGroup(paste(type,input$click_hours))
+        else{leafletProxy("map") %>% hideGroup(paste(type,1:24))}
+      }
     }
+    else{
+      for(type in complaint$type){
+        if(type %in% input$click_complaint_type) leafletProxy("map") %>% showGroup(paste(type,1:24))
+        else{leafletProxy("map") %>% hideGroup(paste(type,1:24))}
+      }
+    }
+
   }, ignoreNULL = FALSE)
   
   ## all/none complaint types
@@ -155,9 +184,25 @@ shinyServer(function(input, output, session) {
                              selected = NULL)
   })
   
+  ## complaints in diff hours
+  observeEvent(input$click_enable_hours, {
+    if(input$click_enable_hours){
+      output$click_hours <-  renderUI({
+        sliderInput("click_hours","Hours", min=1,max=24,value=1,step=1)
+      })
+      output$click_complaints_hour_text <- renderUI({
+        p(strong(textOutput("click_complaints_hour", inline = T)))
+      })
+    }
+    else{
+      output$click_hours <-  renderUI({})
+      output$click_complaints_hour_text <- renderUI({})
+    }
+  })
+
   ## clear all circles
   observeEvent(input$clear_circles, {
-    leafletProxy('map') %>% clearGroup(c("circles","centroids",complaint$type))
+    leafletProxy('map') %>% clearGroup(c("circles","centroids",paste(complaint$type,rep(1:24,each=7))))
   })
   
   
