@@ -6,11 +6,11 @@ Term: Fall 2016
 + Team #8
 + Project title: [Noises Around You](https://adamgao666.shinyapps.io/nyc_noises/)
 + Team members
-	+ Chen, Zheyuan
 	+ Gao, Yinxiang
-	+ Song, Shuli
-	+ Zhang, Chi
 	+ Zhang, Wanyi
+	+ Song, Shuli
+	+ Chen, Zheyuan
+	+ Zhang, Chi
 
 ### Link
 
